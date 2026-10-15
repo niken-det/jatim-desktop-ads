@@ -23,7 +23,7 @@ a{color:#2B3F94}a:hover{color:#1C2A66}
 
 <div style="height: 56px; flex-shrink: 0; box-sizing: border-box; padding: 0 20px; display: flex; align-items: center; gap: 16px; background: #111111; color: #FFFFFF">
 <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 3px">
-<div style="font-size: 13px; font-weight: 700">Desktop · Welcome page detikJatim · sesuai rules desktop · 31 slot</div>
+<div style="font-size: 13px; font-weight: 700">Desktop · Welcome page detikJatim · sesuai rules desktop · 32 slot</div>
 <div style="display: flex; gap: 14px; font-size: 10px; font-weight: 600; color: #D4D4CF">
 <span style="display: flex; align-items: center; gap: 4px"><span style="width: 9px; height: 9px; background: #2F5DA8"></span>Display / frame / skinner</span>
 <span style="display: flex; align-items: center; gap: 4px"><span style="width: 9px; height: 9px; background: #B42318"></span>In-feed</span>
@@ -130,6 +130,17 @@ a{color:#2B3F94}a:hover{color:#1C2A66}
 </div>
 </sc-if>
 
+<sc-if value="{{r.isNatNHL}}" hint-placeholder-val="{{false}}">
+<div data-ad="NND1" data-zone="main" data-w="0.5" style="display: flex; gap: 18px; padding: 10px 30px 10px 10px; margin: 4px 0; box-sizing: border-box; border: 2px dashed #6D28D9; background: #EFE7FD; color: #3B1677">
+<div style="width: 200px; height: 120px; flex-shrink: 0; background: #DDD0F7; border-radius: 6px"></div>
+<div style="flex-grow: 1; display: flex; flex-direction: column; gap: 9px; padding-top: 4px">
+<div style="display: flex; gap: 8px; align-items: center"><span style="font-size: 9px; font-weight: 700; letter-spacing: .08em; background: #6D28D9; color: #FFFFFF; padding: 2px 6px; border-radius: 3px">SPONSOR</span><span style="font-size: 12px; font-weight: 700">{{r.label}}</span></div>
+<div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px">{{r.size}}</div>
+<div style="height: 12px; width: 70%; background: #D6C6F5; border-radius: 6px"></div>
+</div>
+</div>
+</sc-if>
+
 <sc-if value="{{r.isAd}}" hint-placeholder-val="{{false}}">
 <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 0; background: #F4F3F0; margin: 8px 0">
 <span style="font-size: 9px; font-weight: 600; letter-spacing: .08em; color: #6E6A62">ADVERTISEMENT</span>
@@ -212,7 +223,7 @@ a{color:#2B3F94}a:hover{color:#1C2A66}
 </div>
 </sc-if>
 <sc-if value="{{s.isEmpty}}" hint-placeholder-val="{{false}}">
-<div style="height: 260px; border: 1.5px dashed #A8A8A2; border-radius: 8px; padding: 14px; box-sizing: border-box; font-size: 11px; font-weight: 600; line-height: 1.45; color: #5E5A52">Di bawah MR Adsmart 3 kolom kanan kosong sampai Indeks Berita.</div>
+<div style="height: 260px; border: 1.5px dashed #A8A8A2; border-radius: 8px; padding: 14px; box-sizing: border-box; font-size: 11px; font-weight: 600; line-height: 1.45; color: #5E5A52">Di bawah MR6 kolom kanan kosong sampai Indeks Berita.</div>
 </sc-if>
 </div>
 </sc-for>
@@ -335,7 +346,7 @@ class Component extends DCLogic {
   renderVals() {
     const st = this.state || {};
     const o = st.adsOnly ? 0.2 : 1;
-    const base = { isHL: false, isNHL: false, isAd: false, isCB: false, isRekom: false, o: o };
+    const base = { isHL: false, isNHL: false, isAd: false, isCB: false, isRekom: false, isNatNHL: false, o: o };
     const k = (no, flag, extra) => ({ ...base, no: no, [flag]: true, ...(extra || {}) });
     const nhl = (no, n) => k(no, 'isNHL', { label: 'NHL ' + n });
     const cb = (no, name, h) => k(no, 'isCB', { label: name, hpx: (h || 120) + 'px' });
@@ -344,7 +355,9 @@ class Component extends DCLogic {
     const left = [
       k('', 'isHL'),
       ad('', 'Promobox', 400, 250, '400x250 · area Headline ke newsfeed'),
-      nhl('', 1), nhl('', 2), nhl('', 3), nhl('', 4), nhl('', 5),
+      nhl('', 1),
+      k('', 'isNatNHL', { label: 'Native Ads', size: 'Native · format NHL · di antara NHL 1 dan NHL 2' }),
+      nhl('', 2), nhl('', 3), nhl('', 4), nhl('', 5),
       ad('', 'In feeds 1', 320, 480, '300x250 · 320x480 · sinyal pertama tertarik berita'),
       cb('', 'CB Info Sekitarmu - Jatim', 160),
       nhl('', 6), nhl('', 7), nhl('', 8), nhl('', 9), nhl('', 10),
@@ -385,17 +398,17 @@ class Component extends DCLogic {
       rcb('R5', 'CB Berita Terpopuler'),
       mr('R6', 'MR4', 'MR4', '300x250', 'Di atas CB Komentar Terbanyak'),
       rcb('R7', 'CB Komentar Terbanyak'),
-      mr('R8', 'MR5', 'MR5', '300x250', 'Di atas CB Lapor Jatim'),
+      mr('R8', 'MRA1', 'Medium Rectangle Adsmart 1', '300x250 · materi 300 x 250 px', 'Di atas CB Lapor Jatim'),
       rcb('R9', 'CB Lapor Jatim'),
-      mr('R10', 'MR6', 'MR6', '300x250', 'Di atas CB Lapor Cak'),
+      mr('R10', 'MR5', 'MR5', '300x250', 'Di atas CB Lapor Cak'),
       rcb('R11', 'CB Lapor Cak'),
-      mr('R12', 'MR7', 'MR7', '300x250', 'Di atas CB Woro-Woro'),
+      mr('R12', 'MRA2', 'Medium Rectangle Adsmart 2', '300x250 · materi 300 x 250 px', 'Di atas CB Woro-Woro'),
       rcb('R13', 'CB Woro-Woro'),
-      mr('R14', 'MRA1', 'Medium Rectangle Adsmart 1', '300x250', 'Di atas CB BB'),
+      mr('R14', 'MRA3', 'Medium Rectangle Adsmart 3', '300x250', 'Di atas CB BB'),
       rcb('R15', 'CB BB'),
-      mr('R16', 'MRA2', 'Medium Rectangle Adsmart 2', '300x250', 'Di atas CB Loker Jatim'),
+      mr('R16', 'MRA4', 'Medium Rectangle Adsmart 4', '300x250', 'Di atas CB Loker Jatim'),
       rcb('R17', 'CB Loker Jatim'),
-      mr('R18', 'MRA3', 'Medium Rectangle Adsmart 3', '300x250', 'Setelah CB Loker Jatim'),
+      mr('R18', 'MR6', 'MR6', '300x250', 'Setelah CB Loker Jatim'),
       { ...rb, isRekom: true, grow: 1, no: 'R19', cards: [
         { ad: false, news: true, label: 'Artikel Rekomendasi 1', o: o },
         { ad: false, news: true, label: 'Artikel Rekomendasi 2', o: o },
